@@ -1,8 +1,8 @@
 {
-  "name": "crypto-best",
+  "name": "crypto-tracker",
   "version": "1.0.0",
-  "description": "Crypto best with Vue",
-  "author": "farizikhsan <farizikhsan@mindosolutions.com>",
+  "description": "Crypto Tracker with Vue",
+  "author": "Aditio Agung Nugroho <aditioan.uny@gmail.com>",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
