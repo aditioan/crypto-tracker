@@ -1,0 +1,24 @@
+@import url("/static/css/font.css");
+
+html,body{
+	height:100%;
+}
+body{
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 400;	
+	font-size:14px;
+	background-color:#f6f7eb;
+}
+a{
+	color:#3e8acc;
+}
+.btn{
+	font-size: 0.9rem;
+	padding: 6px 14px;
+}
+
+.btn-primary{
+	background-color:#3e8acc;
+	border-color:#3e8acc;
+}
