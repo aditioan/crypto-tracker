@@ -1,3 +1,5 @@
-new project front end using vue
+#Crypto Tracker
 
-gitflow add 
+Front end for Crypto Tracker application using VueJS
+
+- Move repository to public
