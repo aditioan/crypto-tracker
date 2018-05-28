@@ -17,6 +17,13 @@
                         </b-col>
                     </b-row>
                 </b-form-group>
+                <b-form-group id="inputExchangeGroup" :label-cols="2" label="Funding Name*" label-for="inputExchange" horizontal>
+                    <b-row>
+                        <b-col sm="5">
+                            <b-form-input id="inputValue"  type="text" v-model="form.fund_name" placeholder="Enter name"></b-form-input>
+                        </b-col>
+                    </b-row>
+                </b-form-group>
                 <b-form-group id="inputBoughtAmountGroup" :label-cols="2" label="Fund Amount*" label-for="inputBoughtAmount" horizontal>
                     <b-row>
                         <b-col sm="5">
@@ -28,7 +35,7 @@
                         <b-col sm="6" style="padding-right:0;">
                             <b-form-group id="inputTotalValueGroup" label="Value" label-for="inputValue" horizontal style="margin-bottom:0px !important;">
                                 <b-input-group size="sm">
-                                    <b-input-group-text slot="append" v-bind:class="{loadinggif: loadingBought}">{{ baseCurrency.ticker_default }}/{{ selectedBoughtCurrency }}</b-input-group-text>                            
+                                    <b-input-group-text slot="append" v-bind:class="{loadinggif: loaderCurrency}">{{ baseCurrency.ticker_default }}/{{ selectedCurrency }}</b-input-group-text>                            
                                     <b-form-input id="inputValue"  type="text" v-model="form.fund_value" placeholder="enter value" class="text-right pr-3"></b-form-input>
                                 </b-input-group>
                             </b-form-group>
@@ -38,18 +45,24 @@
                         </b-col>
                     </b-row>
                 </b-form-group>
-                <b-form-group id="inputExchangeGroup" :label-cols="2" label="Wallet/Account*" label-for="inputExchange" horizontal>
+                <b-form-group id="inputExchangeGroup" v-show="form.fund_currency_id" :label-cols="2" label="Taken From*" label-for="inputExchange" horizontal>
                     <b-row>
                         <b-col sm="5">
-                            <b-form-select id="inputExchange" class="form-control" size="sm" :options="currencies" :text-field="'name'" :value-field="'id'" v-model="form.from_account_id">
-                                <template slot="first">
+                             <b-form-select id="inputExchange" class="form-control" size="sm" v-model="form.from_account_id" required >
                                     <option :value="null" disabled>-- Select Wallet/Account --</option>
-                                </template>
-                            </b-form-select>
+                                    <option v-for="wallet in wallets" v-show="walletSelection" :value="'wallet_'+wallet.id">{{ wallet.name }}</option>
+                                    <option v-for="account in accounts" v-show="accountSelection" :value="'account_'+account.id">{{ account.bank_name }}</option>
+                                </b-form-select>
                         </b-col>
                     </b-row>
                 </b-form-group>
-
+                <b-form-group id="inputExchangeGroup" v-show="hasAddress" :label-cols="2" label="address*" label-for="inputExchange" horizontal>
+                    <b-row>
+                        <b-col sm="5">
+                            <b-form-input id="inputValue"  type="text" v-model="form.address" placeholder="Enter address"></b-form-input>
+                        </b-col>
+                    </b-row>
+                </b-form-group>
                 <b-form-group id="inputCommentGroup" :label-cols="2" label="Comment" label-for="inputComment" horizontal>
                     <b-row>
                         <b-col sm="5">
@@ -68,30 +81,55 @@ import {AtomSpinner} from 'epic-spinners'
 import Vue from 'vue'
 
 export default {
-    props: ['baseCurrencyProp','accountsProp','currenciesProp','dataTransactionProps'],
+    props: ['baseCurrencyProp','accountsProp','dataTransactionProps'],
     components: {
       AtomSpinner
     },    
     data(){
         return{
             loader: false,
-            currencies: this.currenciesProp,
+            loaderCurrency: false,
+            hasAddress: false,
+            walletSelection: false,
+            accountSelection: false,
+            currencies: [],
             accounts: this.accountsProp,
+            wallets: [],
+            digital_currencies: [],
+            fiat_currencies: [],
+            // address: [],
             errors: [],
             baseCurrency: this.baseCurrencyProp,
             dataTransaction: this.dataTransactionProps,
             form: {
                 ico_currency_id: null,
+                fund_name: null,
                 fund_amount: null,
                 fund_currency_id: null,
                 fund_value: null,
                 from_account_id: null,
-                comment: null
+                address: null,
+                comment: null,
             }
         }
     },
     created(){
         this.$parent.$parent.messageModal = false
+        // get data digital currency only
+        this.axios.get('/currency/show/supportive-storage')
+            .then(response => {
+             this.currencies = response.data.data
+            }).catch(error => {
+             console.log(error)
+            })
+
+        this.axios.get('/currency/show/filter?classification=ico')
+            .then(response => {
+                // this.currencies = response.data.data
+                console.log(response.data.data)
+            }).catch(error => {
+                console.log(error)
+            })
 
         //Listen to save event from any component .ex from parent
         this.$eventHub.$on('eventSaveTransaction', this.savePost)
@@ -100,19 +138,67 @@ export default {
     mounted(){
         // assign data when update
         if (this.dataTransaction) {
-            this.form.ico_currency_id = this.dataTransaction.transactionable.ico_currency_id
-            this.form.fund_amount = this.dataTransaction.transactionable.fund_amount
-            this.form.fund_currency_id = this.dataTransaction.transactionable.fund_currency_id
-            this.form.fund_value = this.dataTransaction.transactionable.fund_value
-            this.form.from_account_id = this.dataTransaction.transactionable.from_account_id
-            this.form.comment = this.dataTransaction.transactionable.comment
+            console.log('Hello!')
+            // this.form.ico_currency_id = this.dataTransaction.transactionable.ico_currency_id
+            // this.form.fund_name = this.dataTransaction.transactionable.fund_name
+            // this.form.fund_amount = this.dataTransaction.transactionable.fund_amount
+            // this.form.fund_currency_id = this.dataTransaction.transactionable.fund_currency_id
+            // this.form.fund_value = this.dataTransaction.transactionable.fund_value
+            // this.form.from_account_id = this.dataTransaction.transactionable.from_account_id
+            // this.form.comment = this.dataTransaction.transactionable.comment
         }
     },
     watch: {
+        'form.from_account_id': function(val) {
+            if (val) {
+                let type = val.split('_')
+                type[0] == 'wallet' ? this.hasAddress = true : this.hasAddress = false
+                if (type[0] == 'wallet') {
+                    this.hasAddress = true
+                    let selectedWallet = this.wallets.find(x => x.id == type[1])
 
+                    // this.address = []
+                    this.form.address = selectedWallet.addresses[0].address
+                    // this.address.push(selectedAddress.address)
+                }else{
+                    this.hasAddress = false
+                }
+            }
+        },
+        'form.fund_currency_id': function(val) {
+            this.loaderCurrency = true
+            let currencySelection = this.currencies.find(x => x.id == val)
+            let apiDataCurrency = 'https://min-api.cryptocompare.com/data/dayAvg?fsym=' + currencySelection.ticker_default + '&tsym=' + this.baseCurrency.ticker_default + '&toTs=' + moment(new Date(), "DD MMMM YYYY").unix()
+
+            let apiCurrency = this.axios.create({
+                baseURL: apiDataCurrency,
+                timeout: 3000,
+            });
+            apiCurrency.get()
+                .then(response => {
+                    this.loaderCurrency = false
+                    this.form.fund_value = response.data[this.baseCurrency.ticker_default]
+                }).catch(error => {
+                    console.log("Error getting data from API")
+                })
+            if (currencySelection.classification == 'digital') {
+                this.walletSelection = true
+                this.accountSelection = false
+                this.hasAddress = false
+                this.form.from_account_id = null
+                this.wallets = currencySelection.supportive_wallets
+            } else {
+                this.walletSelection = false
+                this.accountSelection = true
+                this.hasAddress = false
+            }
+        },
     },
 	computed: {
-
+        selectedCurrency: function(){
+            let currencySelection = this.currencies.find(x => x.id == this.form.fund_currency_id)
+            return currencySelection ? currencySelection.ticker_default : ''
+        },
     },
     methods: {
         savePost(){

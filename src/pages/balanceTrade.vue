@@ -68,7 +68,7 @@
 			<transactionFundRedemption v-if="currentComponent == 'transactionFundRedemption'" :baseCurrencyProp="baseCurrency" :currenciesProps="currencies" :bankAccountsProps="bankAccounts"></transactionFundRedemption>
 			<transactionDeposit v-if="currentComponent == 'transactionDeposit'" :baseCurrencyProp="baseCurrency" :openingBalanceProp="openingBalanceTx" :walletsProp="wallets"  :currenciesProp="currencies" :exchangesProp="exchanges" :accountsProp="bankAccounts"></transactionDeposit>
 			<transactionBought v-if="currentComponent == 'transactionBought'" :baseCurrencyProp="baseCurrency" :currenciesProp="currencies" :exchangesProp="exchanges" :accountsProp="bankAccounts"></transactionBought>
-			<transactionICOFunding v-if="currentComponent == 'transactionICOFunding'" :baseCurrencyProp="baseCurrency" :currenciesProp="currencies" :accountsProp="bankAccounts"></transactionICOFunding>
+			<transactionICOFunding v-if="currentComponent == 'transactionICOFunding'" :baseCurrencyProp="baseCurrency" :accountsProp="bankAccounts"></transactionICOFunding>
 			<transactionICORealization v-if="currentComponent == 'transactionICORealization'" :baseCurrencyProp="baseCurrency" :currenciesProp="currencies" :accountsProp="bankAccounts"></transactionICORealization>
 			<transactionTransfered :exchangesProps="exchanges" :walletsProps="wallets" v-if="currentComponent == 'transactionTransfered'"></transactionTransfered>
 			<transactionBankFee :baseCurrencyProp="baseCurrency" :currenciesProps="currencies" :bankAccountsProps="bankAccounts" v-if="currentComponent == 'transactionBankFee'"></transactionBankFee>
@@ -88,8 +88,8 @@
 		<div slot="modal-footer">
 			<button type="button" class="btn btn-secondary" data-dismiss="modal" @click="closeModal">Close</button>
 			<b-btn size="sm" variant="danger" v-if="form.updateId != null" @click="deletePost(dataTransaction)">Delete</b-btn>
-			<b-btn size="sm" variant="primary" v-if="form.updateId != null" @click="editPost">Edit Transaction</b-btn>
-			<button type="button" class="btn btn-primary" v-if="form.updateId == null" @click="savePost">Save changes</button>
+			<b-btn size="sm" variant="primary" v-if="form.updateId != null" @click="editPost">Save Changes</b-btn>
+			<button type="button" class="btn btn-primary" v-if="form.updateId == null" @click="savePost">Save Changes</button>
 		</div>
   	</b-modal>
 	<!-- Modal End-->

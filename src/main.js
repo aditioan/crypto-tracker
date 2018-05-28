@@ -58,6 +58,7 @@ import settingWalletPage from './components/SettingComponents/settingWallet'
 import settingBankPage from './components/SettingComponents/settingBank'
 import settingExchangePage from './components/SettingComponents/settingExchange'
 import settingUserPage from './components/SettingComponents/settingUser'
+import settingDev from './components/SettingComponents/settingDev'
 
 // 404 page
 import pageNotFound from './pages/404'
@@ -90,6 +91,7 @@ const routes = [
 		{path: 'bank', component: settingBankPage },
 		{path: 'exchange', component: settingExchangePage },
 		{path: 'user', component: settingUserPage },
+		{path: 'dev', component: settingDev },
 		{path: '', redirect: 'dashboard', meta: {auth: true} },
     ] 
   },

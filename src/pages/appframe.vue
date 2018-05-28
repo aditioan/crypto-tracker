@@ -44,7 +44,7 @@
 		<li class="list-group-item">
 			<a href="#"><i class="fas fa-balance-scale fa-lg fa-fw"></i><span>Balance &amp; Trades</span></a>
 			<div class="subMenuDiv">
-				<router-link to="/balancetrade">Balance &amp; Trades</router-link>
+				<router-link to="/balancetrade">Transaction</router-link>
 				<router-link to="/monthlysnapshot">Monthly Snapshot</router-link>
 			</div>
 		</li>
@@ -62,6 +62,7 @@
 				<router-link to="/bank">Bank Accounts</router-link>
 				<router-link to="/exchange">Exchanges</router-link>
 				<router-link v-if="$auth.user().roles[0].name === 'admin'" to="/user">Users</router-link>
+				<!--<router-link v-if="$auth.user().roles[0].name === 'admin'" to="/dev">Development</router-link>-->
 			</div>
 		</li>
 	</ul>	
